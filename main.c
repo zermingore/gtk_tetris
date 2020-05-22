@@ -2,9 +2,16 @@
 
 
 
-static void print_hello(GtkWidget *widget, gpointer data)
+static void left_cb(GtkWidget *widget, gpointer data)
 {
-  g_print("Hello world!\n");
+  g_print("Left\n");
+}
+
+
+
+static void right_cb(GtkWidget *widget, gpointer data)
+{
+  g_print("Right\n");
 }
 
 
@@ -24,11 +31,11 @@ static void activate(GtkApplication *app, gpointer user_data)
 
   // Add buttons
   GtkWidget *button = gtk_button_new_with_label("<-");
-  g_signal_connect(button, "clicked", G_CALLBACK(print_hello), NULL);
+  g_signal_connect(button, "clicked", G_CALLBACK(left_cb), NULL);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
 
   button = gtk_button_new_with_label("->");
-  g_signal_connect(button, "clicked", G_CALLBACK(print_hello), NULL);
+  g_signal_connect(button, "clicked", G_CALLBACK(right_cb), NULL);
   gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
 
   button = gtk_button_new_with_label("Exit");

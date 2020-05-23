@@ -36,10 +36,10 @@ int main(int argc, char **argv)
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
 
-  GObject *play = gtk_builder_get_object(builder, "play_zone");
+  GObject *render = gtk_builder_get_object(builder, "render");
 
   // phone 720x1440 -> 720x1360 (buttons free space)
-  gtk_widget_set_size_request((GtkWidget*) play, 360, 720);
+  gtk_widget_set_size_request((GtkWidget*) render, 360, 720);
 
 
   GObject *button = gtk_builder_get_object(builder, "button_left");

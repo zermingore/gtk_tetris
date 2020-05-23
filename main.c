@@ -32,20 +32,20 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  GObject *window = gtk_builder_get_object(builder, "window");
+  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  GObject *window = gtk_builder_get_object (builder, "window");
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  GObject *button = gtk_builder_get_object(builder, "button_left");
+  g_signal_connect(button, "clicked", G_CALLBACK(left_cb), NULL);
 
-  GObject *button = gtk_builder_get_object (builder, "button_left");
-  g_signal_connect (button, "clicked", G_CALLBACK (left_cb), NULL);
+  button = gtk_builder_get_object(builder, "button_right");
+  g_signal_connect(button, "clicked", G_CALLBACK(right_cb), NULL);
 
-  button = gtk_builder_get_object (builder, "button_right");
-  g_signal_connect (button, "clicked", G_CALLBACK (right_cb), NULL);
+  button = gtk_builder_get_object(builder, "quit");
+  g_signal_connect(button, "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
-  button = gtk_builder_get_object (builder, "quit");
-  g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_main ();
+  gtk_main();
 
   return 0;
 }

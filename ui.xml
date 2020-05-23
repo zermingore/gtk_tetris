@@ -7,13 +7,22 @@
       <object id="grid" class="GtkGrid">
         <property name="visible">True</property>
         <child>
+          <object id="play_zone" class="GtkButton">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
           <object id="button_left" class="GtkButton">
             <property name="visible">True</property>
             <property name="label">&lt;-</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="left-attach">100</property>
+            <property name="top-attach">100</property>
           </packing>
         </child>
         <child>
@@ -22,8 +31,8 @@
             <property name="label">-&gt;</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="left-attach">101</property>
+            <property name="top-attach">100</property>
           </packing>
         </child>
         <child>
@@ -32,8 +41,8 @@
             <property name="label">Quit</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left-attach">100</property>
+            <property name="top-attach">101</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -43,8 +52,8 @@
             <property name="file">square_40px.png</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="left-attach">100</property>
+            <property name="top-attach">102</property>
             <property name="width">1</property>
           </packing>
         </child>

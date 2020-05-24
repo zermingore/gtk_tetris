@@ -3,22 +3,13 @@
 
 
 
-static void left_cb(GtkWidget *widget, gpointer data)
+static int init_render_window()
 {
-  g_print("Left\n");
-}
-
-
-
-static void right_cb(GtkWidget *widget, gpointer data)
-{
-  g_print("Right\n");
-}
-
-
-
-static gboolean draw()
-{
+  GLenum res = glewInit();
+  if (res != GLEW_OK) {
+    fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+    return 1;
+  }
   // may try legacy versions (1.10? / ES?)
   const char *vertexShaderSource =
     "#version 330 core\n"
@@ -49,7 +40,7 @@ static gboolean draw()
   {
     glGetShaderInfoLog(vertexShader, 512, NULL, err);
     g_print("Shader vertex compilation failed %s\n", err);
-    return FALSE;
+    return 1;
   }
 
   // fragment shader
@@ -61,7 +52,7 @@ static gboolean draw()
   {
     glGetShaderInfoLog(fragmentShader, 512, NULL, err);
     g_print("Shader fragment compilation failed: %s\n", err);
-    return FALSE;
+    return 1;
   }
 
   // link shaders
@@ -74,11 +65,33 @@ static gboolean draw()
   {
     glGetProgramInfoLog(shaderProgram, 512, NULL, err);
     g_print("Shader program link failure %s\n", err);
-    return FALSE;
+    return 1;
   }
+
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
+  glUseProgram(shaderProgram);
+  return 0;
+}
+
+
+static void left_cb(GtkWidget *widget, gpointer data)
+{
+  g_print("Left\n");
+}
+
+
+
+static void right_cb(GtkWidget *widget, gpointer data)
+{
+  g_print("Right\n");
+}
+
+
+
+static gboolean draw()
+{
   float vertices[] = {
     -0.5f, -0.5f, 0.0f, // bottom left
     0.5f,  -0.5f, 0.0f, // bottom right
@@ -120,7 +133,6 @@ static gboolean draw()
   glClear(GL_COLOR_BUFFER_BIT);
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-  glUseProgram(shaderProgram);
   glBindVertexArray(vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
@@ -151,18 +163,14 @@ int main(int argc, char **argv)
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
   GObject *render = gtk_builder_get_object(builder, "render");
-
-
   // phone 720x1440 -> 720x1360 (buttons free space)
   gtk_widget_set_size_request((GtkWidget*) render, 360, 720);
-
   gtk_gl_area_make_current((GtkGLArea*) render);
-  GLenum res = glewInit();
-  if (res != GLEW_OK) {
-    fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+  if (init_render_window())
+  {
+    g_print("Failure initializing the rendering zone. Aborting...");
     return 1;
   }
-
 
   GObject *button = gtk_builder_get_object(builder, "button_left");
   g_signal_connect(button, "clicked", G_CALLBACK(left_cb), NULL);

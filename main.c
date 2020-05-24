@@ -5,6 +5,10 @@
 
 GObject *g_render;
 
+int g_current_block_col = 5;
+int g_current_block_line = 18;
+int g_current_block_nb_cols = 2;
+int g_current_block_nb_lines = 2;
 
 static int init_render_window()
 {
@@ -77,7 +81,7 @@ static int init_render_window()
 
   glUseProgram(shaderProgram);
 
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // debug
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // debug
 
   return 0;
 }
@@ -85,14 +89,16 @@ static int init_render_window()
 
 static void left_cb(GtkWidget *widget, gpointer data)
 {
-  g_print("Left\n");
+  if (g_current_block_col > 0)
+    --g_current_block_col;
 }
 
 
 
 static void right_cb(GtkWidget *widget, gpointer data)
 {
-  g_print("Right\n");
+  if (g_current_block_col < 10 - g_current_block_nb_cols)
+    ++g_current_block_col;
 }
 
 
@@ -116,6 +122,14 @@ static gboolean draw()
     vertices[7] -= 0.05;
     vertices[10] -= 0.05;
   }
+
+
+  vertices[0] = -1 + g_current_block_col * 0.2;
+  vertices[9] = -1 + g_current_block_col * 0.2;
+
+  vertices[3] = vertices[0] + g_current_block_nb_cols * 0.2;
+  vertices[6] = vertices[0] + g_current_block_nb_cols * 0.2;
+
 
   unsigned int idx[] = {
     0, 1, 3,

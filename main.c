@@ -3,6 +3,9 @@
 
 
 
+GObject *g_render;
+
+
 static int init_render_window()
 {
   GLenum res = glewInit();
@@ -89,15 +92,28 @@ static void right_cb(GtkWidget *widget, gpointer data)
 }
 
 
+float vertices[] = {
+  -0.5f, -0.5f, 0.0f, // bottom left
+  0.5f,  -0.5f, 0.0f, // bottom right
+  0.5f,  0.5f,  0.0f, // top right
+  -0.5f, 0.5f,  0.0f  // top left
+};
 
+
+GRand *g_rand;
 static gboolean draw()
 {
-  float vertices[] = {
-    -0.5f, -0.5f, 0.0f, // bottom left
-    0.5f,  -0.5f, 0.0f, // bottom right
-    0.5f,  0.5f,  0.0f, // top right
-    -0.5f, 0.5f,  0.0f  // top left
-  };
+  g_print("draw\n");
+
+  static float offset = 0.f;
+  if (offset < 0.9)
+  {
+    offset += 0.05;
+    vertices[1] -= 0.05;
+    vertices[4] -= 0.05;
+    vertices[7] -= 0.05;
+    vertices[10] -= 0.05;
+  }
 
   unsigned int idx[] = {
     0, 1, 3,
@@ -105,21 +121,19 @@ static gboolean draw()
   };
 
   unsigned int vbo;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STREAM_DRAW);
+
   unsigned int vao;
   glGenVertexArrays(1, &vao);
-  glGenBuffers(1, &vbo);
-
   glBindVertexArray(vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   unsigned int ebo;
   glGenBuffers(1, &ebo);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
-
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STREAM_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
   glEnableVertexAttribArray(0);
@@ -127,9 +141,11 @@ static gboolean draw()
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-
-  // loop
-  glClearColor(.95, .95, .95, 0);
+  g_print("%f\n", g_rand_double(g_rand));
+  glClearColor(  .95 + g_rand_double(g_rand)
+               , .95 + g_rand_double(g_rand)
+               , .95 + g_rand_double(g_rand)
+               , 0);
   glClear(GL_COLOR_BUFFER_BIT);
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -137,6 +153,8 @@ static gboolean draw()
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 
+
+  gtk_widget_queue_draw((GtkWidget*) g_render);
 
   return TRUE;
 }
@@ -162,10 +180,10 @@ int main(int argc, char **argv)
   GObject *window = gtk_builder_get_object(builder, "window");
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  GObject *render = gtk_builder_get_object(builder, "render");
+  g_render = gtk_builder_get_object(builder, "render");
   // phone 720x1440 -> 720x1360 (buttons free space)
-  gtk_widget_set_size_request((GtkWidget*) render, 360, 720);
-  gtk_gl_area_make_current((GtkGLArea*) render);
+  gtk_widget_set_size_request((GtkWidget*) g_render, 360, 720);
+  gtk_gl_area_make_current((GtkGLArea*) g_render);
   if (init_render_window())
   {
     g_print("Failure initializing the rendering zone. Aborting...");
@@ -181,8 +199,10 @@ int main(int argc, char **argv)
   button = gtk_builder_get_object(builder, "quit");
   g_signal_connect(button, "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
-  g_signal_connect(render, "render", G_CALLBACK(draw), NULL);
+  gtk_gl_area_set_auto_render((GtkGLArea*) g_render, TRUE);
+  g_signal_connect(g_render, "render", G_CALLBACK(draw), NULL);
 
+  g_rand = g_rand_new_with_seed(123456);
   gtk_main();
 
   return 0;

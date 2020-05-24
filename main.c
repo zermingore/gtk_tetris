@@ -13,6 +13,7 @@ static int init_render_window()
     fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
     return 1;
   }
+
   // may try legacy versions (1.10? / ES?)
   const char *vertexShaderSource =
     "#version 330 core\n"
@@ -75,6 +76,9 @@ static int init_render_window()
   glDeleteShader(fragmentShader);
 
   glUseProgram(shaderProgram);
+
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // debug
+
   return 0;
 }
 
@@ -103,8 +107,6 @@ float vertices[] = {
 GRand *g_rand;
 static gboolean draw()
 {
-  g_print("draw\n");
-
   static float offset = 0.f;
   if (offset < 0.9)
   {
@@ -141,18 +143,12 @@ static gboolean draw()
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  g_print("%f\n", g_rand_double(g_rand));
-  glClearColor(  .95 + g_rand_double(g_rand)
-               , .95 + g_rand_double(g_rand)
-               , .95 + g_rand_double(g_rand)
-               , 0);
+  glClearColor(.95, .95, .95, 0);
   glClear(GL_COLOR_BUFFER_BIT);
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   glBindVertexArray(vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
-
 
   gtk_widget_queue_draw((GtkWidget*) g_render);
 
@@ -201,6 +197,8 @@ int main(int argc, char **argv)
 
   gtk_gl_area_set_auto_render((GtkGLArea*) g_render, TRUE);
   g_signal_connect(g_render, "render", G_CALLBACK(draw), NULL);
+
+  // g_timeout_add(16, draw, NULL); // fps limit try
 
   g_rand = g_rand_new_with_seed(123456);
   gtk_main();

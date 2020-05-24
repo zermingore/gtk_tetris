@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <GL/glew.h>
 
 
 
@@ -12,6 +13,105 @@ static void left_cb(GtkWidget *widget, gpointer data)
 static void right_cb(GtkWidget *widget, gpointer data)
 {
   g_print("Right\n");
+}
+
+
+
+static gboolean draw()
+{
+  // may try legacy versions (1.10? / ES?)
+  const char *vertexShaderSource =
+    "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
+
+  const char *fragmentShaderSource =
+    "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "   FragColor = vec4(.2f, 0.2f, 0.2f, 1.0f);\n"
+    "}\n\0";
+
+
+  // shader build
+  int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(vertexShader);
+
+  char err[512];
+  int success;
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(vertexShader, 512, NULL, err);
+    g_print("Shader vertex compilation failed %s\n", err);
+    return FALSE;
+  }
+
+  // fragment shader
+  int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(fragmentShader);
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(fragmentShader, 512, NULL, err);
+    g_print("Shader fragment compilation failed: %s\n", err);
+    return FALSE;
+  }
+
+  // link shaders
+  int shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  glLinkProgram(shaderProgram);
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if (!success)
+  {
+    glGetProgramInfoLog(shaderProgram, 512, NULL, err);
+    g_print("Shader program link failure %s\n", err);
+    return FALSE;
+  }
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+
+  float vertices[] = {
+    -0.5f, -0.5f, 0.0f, // left
+    0.5f, -0.5f, 0.0f,  // right
+    0.0f,  0.5f, 0.0f   // top
+  };
+
+  unsigned int vbo;
+  unsigned int vao;
+  glGenVertexArrays(1, &vao);
+  glGenBuffers(1, &vbo);
+
+  glBindVertexArray(vao);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+
+  // loop
+  glClearColor(.95, .95, .95, 0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(shaderProgram);
+  glBindVertexArray(vao);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
+
+  return TRUE;
 }
 
 
@@ -35,11 +135,18 @@ int main(int argc, char **argv)
   GObject *window = gtk_builder_get_object(builder, "window");
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-
   GObject *render = gtk_builder_get_object(builder, "render");
+
 
   // phone 720x1440 -> 720x1360 (buttons free space)
   gtk_widget_set_size_request((GtkWidget*) render, 360, 720);
+
+  gtk_gl_area_make_current((GtkGLArea*) render);
+  GLenum res = glewInit();
+  if (res != GLEW_OK) {
+    fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+    return 1;
+  }
 
 
   GObject *button = gtk_builder_get_object(builder, "button_left");
@@ -51,6 +158,7 @@ int main(int argc, char **argv)
   button = gtk_builder_get_object(builder, "quit");
   g_signal_connect(button, "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
+  g_signal_connect(render, "render", G_CALLBACK(draw), NULL);
 
   gtk_main();
 

@@ -2,6 +2,11 @@
 #include <GL/glew.h>
 
 
+const int GRID_NB_LINES = 18;
+const int GRID_NB_COLUMNS = 10;
+
+int grid[18][10] = { 0, };
+
 
 GObject *g_render;
 
@@ -78,8 +83,9 @@ static int init_render_window()
 
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
-
   glUseProgram(shaderProgram);
+
+  //glViewport(0, 0, 360, 720);
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // debug
 
@@ -113,14 +119,33 @@ float vertices[] = {
 GRand *g_rand;
 static gboolean draw()
 {
+  for (int i = 0; i < GRID_NB_LINES; ++i)
+  {
+    for (int j = 0; j < GRID_NB_COLUMNS; ++j)
+    {
+      if (grid[i][j])
+      {
+        float vertices[] = {
+          -0.5f, -0.5f, 0.0f, // bottom left
+          0.5f,  -0.5f, 0.0f, // bottom right
+          0.5f,  0.5f,  0.0f, // top right
+          -0.5f, 0.5f,  0.0f  // top left
+        };
+
+//        drawCell(i, j);
+      }
+    }
+  }
+
+
   static float offset = 0.f;
   if (offset < 0.9)
   {
-    offset += 0.05;
-    vertices[1] -= 0.05;
-    vertices[4] -= 0.05;
-    vertices[7] -= 0.05;
-    vertices[10] -= 0.05;
+    offset += 0.01;
+    vertices[1] -= 0.01;
+    vertices[4] -= 0.01;
+    vertices[7] -= 0.01;
+    vertices[10] -= 0.01;
   }
 
 

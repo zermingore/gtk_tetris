@@ -9,6 +9,7 @@ class Shaders
 public:
   // build the shader (throws!)
   Shaders(const char *pathVertex, const char *pathFragment);
+  Shaders() = delete;
 
   ~Shaders() = default;
 

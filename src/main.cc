@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <GL/glew.h>
 
+#include <Shaders.hh>
+
 
 const int GRID_NB_LINES = 18;
 const int GRID_NB_COLUMNS = 10;
@@ -22,6 +24,8 @@ static int init_render_window()
     fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
     return 1;
   }
+
+  Shaders("src/shader.vs", "src/shader.fs");
 
   // may try legacy versions (1.10? / ES?)
   const char *vertexShaderSource =

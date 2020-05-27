@@ -64,13 +64,21 @@ void Shaders::setBool(const std::string& name, bool value) const
 
 std::string Shaders::getFileContent(const char *path)
 {
-  std::ifstream file;
-  file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-  file.open(path);
-
   std::stringstream sstr;
-  sstr << file.rdbuf();
-  file.close();
+  try
+  {
+    std::ifstream file;
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    file.open(path);
+
+    sstr << file.rdbuf();
+    file.close();
+  }
+  catch (std::ifstream::failure &exc)
+  {
+    std::cerr << "Exception trying to read [" << path << "]: " << exc.what() << "\n";
+    throw exc;
+  }
 
   return sstr.str();
 }

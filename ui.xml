@@ -13,7 +13,7 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">0</property>
-            <property name="width">2</property>
+            <property name="width">4</property>
           </packing>
         </child>
         <child>
@@ -28,13 +28,35 @@
           </packing>
         </child>
         <child>
+          <object id="button_rotate_left" class="GtkButton">
+            <property name="visible">True</property>
+            <property name="label">RL</property>
+            <accelerator key="Down" signal="clicked" modifiers="GDK_LOCK_MASK"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object id="button_rotate_right" class="GtkButton">
+            <property name="visible">True</property>
+            <property name="label">RR</property>
+            <accelerator key="Up" signal="clicked" modifiers="GDK_LOCK_MASK"/>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
           <object id="button_right" class="GtkButton">
             <property name="visible">True</property>
             <property name="label">-&gt;</property>
             <accelerator key="Right" signal="clicked" modifiers="GDK_LOCK_MASK"/>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">3</property>
             <property name="top-attach">1</property>
           </packing>
         </child>

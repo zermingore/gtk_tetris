@@ -3,6 +3,10 @@
 
 # include <vector>
 
+# include <Shaders.hh>
+
+
+
 struct Cell;
 
 
@@ -31,6 +35,8 @@ private:
 
   std::vector<std::vector<Cell>> _grid;
   std::vector<std::vector<Cell>> _currentBlock;
+
+  Shaders _shader;
 };
 
 

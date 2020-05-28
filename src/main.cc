@@ -57,25 +57,6 @@ float vertices[] = {
 GRand *g_rand;
 static gboolean draw()
 {
-  for (int i = 0; i < GRID_NB_LINES; ++i)
-  {
-    for (int j = 0; j < GRID_NB_COLUMNS; ++j)
-    {
-      if (grid[i][j])
-      {
-        // float vertices[] = {
-        //   -0.5f, -0.5f, 0.0f, // bottom left
-        //   0.5f,  -0.5f, 0.0f, // bottom right
-        //   0.5f,  0.5f,  0.0f, // top right
-        //   -0.5f, 0.5f,  0.0f  // top left
-        // };
-
-//        drawCell(i, j);
-      }
-    }
-  }
-
-
   static float offset = 0.f;
   if (offset < 0.9)
   {

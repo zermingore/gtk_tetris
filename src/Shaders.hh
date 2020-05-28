@@ -32,9 +32,9 @@ private:
   mutable unsigned int _id; // program id
 
   const unsigned int _errMsgMaxLen = 4096;
-  const int _shader_type_program = 1;
-  const int _shader_type_vertex = 2;
-  const int _shader_type_fragment = 3;
+  const unsigned int _shader_type_program = 1;
+  const unsigned int _shader_type_vertex = 2;
+  const unsigned int _shader_type_fragment = 3;
 };
 
 #endif /* !SHADERS_HH_ */

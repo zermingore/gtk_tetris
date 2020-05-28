@@ -24,8 +24,6 @@ Shaders::Shaders(const char *pathVertex, const char *pathFragment)
   int fragment = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment, 1, &fShaderCode, NULL);
   glCompileShader(fragment);
-  int success;
-  char err[256];
   checkCompilation(fragment, _shader_type_fragment);
 
   // Program

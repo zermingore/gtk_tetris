@@ -11,17 +11,21 @@
 Shaders::Shaders(const char *pathVertex, const char *pathFragment)
 {
   // Vertex Shader
-  const char* vShaderCode = getFileContent(pathVertex).c_str();
+  std::string strVertex = getFileContent(pathVertex);
+  const char *vShaderCode = strVertex.c_str();
   unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex, 1, &vShaderCode, NULL);
   glCompileShader(vertex);
   checkCompilation(vertex, _shader_type_vertex);
 
   // Fragment Shader
-  const char* fShaderCode = getFileContent(pathFragment).c_str();
-  unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
+  std::string strFragment = getFileContent(pathFragment);
+  const char *fShaderCode = strFragment.c_str();
+  int fragment = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment, 1, &fShaderCode, NULL);
   glCompileShader(fragment);
+  int success;
+  char err[256];
   checkCompilation(fragment, _shader_type_fragment);
 
   // Program
@@ -34,6 +38,8 @@ Shaders::Shaders(const char *pathVertex, const char *pathFragment)
   // Free temporary objects
   glDeleteShader(vertex);
   glDeleteShader(fragment);
+
+  use();
 }
 
 
@@ -64,48 +70,59 @@ void Shaders::setBool(const std::string& name, bool value) const
 
 std::string Shaders::getFileContent(const char *path)
 {
-  std::stringstream sstr;
   try
   {
-    std::ifstream file;
-    file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    file.open(path);
+    constexpr auto read_size {std::size_t{4096}};
+    auto stream {std::ifstream{path}};
+    stream.exceptions(std::ios_base::badbit);
 
-    sstr << file.rdbuf();
-    file.close();
+    std::string out;
+    auto buf {std::string(read_size, '\0')};
+    while (stream.read(&buf[0], read_size)) {
+      out.append(buf, 0, stream.gcount());
+    }
+    out.append(buf, 0, stream.gcount());
+    return out;
   }
   catch (std::ifstream::failure &exc)
   {
-    std::cerr << "Exception trying to read [" << path << "]: " << exc.what() << "\n";
+    std::cerr << "Exception reading [" << path << "]: " << exc.what() << "\n";
     throw exc;
   }
-
-  return sstr.str();
+  catch (...)
+  {
+    std::stringstream sstr;
+    sstr << "Unknown exception reading [" << path << "]\n";
+    std::cerr << sstr.str();
+    throw sstr.str();
+  }
 }
 
 
 
 void Shaders::checkCompilation(unsigned int shader, unsigned int type)
 {
-  int error;
+  int success;
   char msg[_errMsgMaxLen];
   if (type != _shader_type_program)
   {
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &error);
-    if (error)
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success)
     {
       glGetShaderInfoLog(shader, _errMsgMaxLen, NULL, msg);
-      std::cerr << "Shader compilation error (" << type << ")\n" << msg;
-      throw;
+      std::stringstream sstr;
+      sstr << "Shader " << shader << " compilation error (" << type << "):\n" << msg;
+      std::cerr << sstr.str();
+      throw std::runtime_error(sstr.str().c_str());
     }
   }
   else
   {
-    glGetProgramiv(shader, GL_LINK_STATUS, &error);
-    if (error)
+    glGetProgramiv(shader, GL_LINK_STATUS, &success);
+    if (!success)
     {
       glGetProgramInfoLog(shader, _errMsgMaxLen, NULL, msg);
-      std::cerr << "Shader linking error (" << type << ")\n" << msg;
+      std::cerr << "Shader " << shader << " linking error (" << type << "):\n" << msg;
       throw;
     }
   }

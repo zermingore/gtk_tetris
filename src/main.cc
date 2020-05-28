@@ -25,11 +25,13 @@ static int init_render_window()
     return 1;
   }
 
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // debug
+
   return 0;
 }
 
 
-static void left_cb(GtkWidget *widget, gpointer data)
+static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
   if (g_current_block_col > 0)
     --g_current_block_col;
@@ -37,7 +39,7 @@ static void left_cb(GtkWidget *widget, gpointer data)
 
 
 
-static void right_cb(GtkWidget *widget, gpointer data)
+static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
   if (g_current_block_col < 10 - g_current_block_nb_cols)
     ++g_current_block_col;
@@ -61,12 +63,12 @@ static gboolean draw()
     {
       if (grid[i][j])
       {
-        float vertices[] = {
-          -0.5f, -0.5f, 0.0f, // bottom left
-          0.5f,  -0.5f, 0.0f, // bottom right
-          0.5f,  0.5f,  0.0f, // top right
-          -0.5f, 0.5f,  0.0f  // top left
-        };
+        // float vertices[] = {
+        //   -0.5f, -0.5f, 0.0f, // bottom left
+        //   0.5f,  -0.5f, 0.0f, // bottom right
+        //   0.5f,  0.5f,  0.0f, // top right
+        //   -0.5f, 0.5f,  0.0f  // top left
+        // };
 
 //        drawCell(i, j);
       }
@@ -136,9 +138,6 @@ static gboolean draw()
 
 int main(int argc, char **argv)
 {
-  GtkApplication *app = gtk_application_new(
-    "com.nous.test", G_APPLICATION_FLAGS_NONE);
-
   gtk_init(&argc, &argv);
 
   GtkBuilder *builder = gtk_builder_new();

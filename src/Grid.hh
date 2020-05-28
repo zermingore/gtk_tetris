@@ -21,20 +21,23 @@ public:
   void draw();
 
   void fall();
+  void newBlock();
 
-
-  auto operator[] (unsigned int column) { return _grid[column]; }
+  void moveLeft();
+  void moveRight();
 
 
 private:
+  auto operator[] (unsigned int column) { return _grid[column]; }
+
   void drawCell(const Cell &cell);
 
 
-  const unsigned int _nbCol = 10;
   const unsigned int _nbLines = 18;
+  const unsigned int _nbCol = 10;
 
   std::vector<std::vector<Cell>> _grid;
-  std::vector<std::vector<Cell>> _currentBlock;
+  std::vector<Cell> _currentBlock;
 
   Shaders _shader;
 };
@@ -44,8 +47,8 @@ private:
 struct Cell
 {
   bool occupied;
-  unsigned int col;
   unsigned int line;
+  unsigned int col;
 };
 
 

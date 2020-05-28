@@ -1,3 +1,8 @@
+#include <thread>
+#include <chrono>
+#include <memory>
+#include <iostream>
+
 #include <gtk/gtk.h>
 #include <GL/glew.h>
 
@@ -6,12 +11,7 @@
 
 GObject *g_render;
 GRand *g_rand;
-
-
-int g_current_block_col = 5;
-int g_current_block_line = 18;
-int g_current_block_nb_cols = 2;
-int g_current_block_nb_lines = 2;
+std::unique_ptr<Grid> g_grid;
 
 
 
@@ -31,24 +31,25 @@ static int init_render_window()
 
 static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  if (g_current_block_col > 0)
-    --g_current_block_col;
+  g_grid->moveLeft();
 }
 
 
 
 static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  if (g_current_block_col < 10 - g_current_block_nb_cols)
-    ++g_current_block_col;
+  g_grid->moveRight();
 }
 
 
 
 static gboolean draw()
 {
-  static Grid g;
-  g.draw();
+  // using namespace std::chrono_literals;
+  // std::this_thread::sleep_for(1s);
+
+  g_grid->fall();
+  g_grid->draw();
   gtk_widget_queue_draw((GtkWidget*) g_render);
 
   return TRUE;
@@ -81,6 +82,8 @@ int main(int argc, char **argv)
     g_print("Failure initializing the rendering zone. Aborting...");
     return 1;
   }
+
+  g_grid = std::make_unique<Grid> ();
 
   GObject *button = gtk_builder_get_object(builder, "button_left");
   g_signal_connect(button, "clicked", G_CALLBACK(left_cb), NULL);

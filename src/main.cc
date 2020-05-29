@@ -121,6 +121,7 @@ int main(int argc, char **argv)
 
 
   g_rand = g_rand_new_with_seed(123456);
+  g_moved_block_horizontally = true; // Forcing a draw at the very beginning
   gtk_main();
 
   return 0;

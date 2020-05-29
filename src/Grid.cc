@@ -42,11 +42,14 @@ Grid::Grid()
 
 void Grid::draw()
 {
+  glClearColor(.95, .95, .95, 0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
   for (auto i{0u}; i < _nbLines; ++i)
   {
     for (auto j{0u}; j < _nbCol; ++j)
     {
-      //if (_grid[i][j].occupied)
+      if (_grid[i][j].occupied)
       {
         drawCell(_grid[i][j]);
       }
@@ -136,9 +139,6 @@ void Grid::drawCell(const Cell &cell)
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  glClearColor(.95, .95, .95, 0);
-  glClear(GL_COLOR_BUFFER_BIT);
-
   glBindVertexArray(vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
@@ -156,8 +156,9 @@ void Grid::moveLeft()
 
   for (auto &cell: _currentBlock)
   {
-    std::cout << "moving block" << std::endl;
+    _grid[cell.line][cell.col].occupied = false;
     --cell.col;
+    _grid[cell.line][cell.col].occupied = true;
   }
 }
 
@@ -173,8 +174,9 @@ void Grid::moveRight()
 
   for (auto &cell: _currentBlock)
   {
-    std::cout << "moving block" << std::endl;
+    _grid[cell.line][cell.col].occupied = false;
     ++cell.col;
+    _grid[cell.line][cell.col].occupied = true;
   }
 }
 

@@ -56,11 +56,9 @@ void Grid::draw()
     }
   }
 
-  std::cout << "current block pos:\n";
   for (const auto &cell: _currentBlock)
   {
     drawCell(cell);
-    std::cout << "  " << cell.line << ", " << cell.col << "\n";
   }
 }
 
@@ -73,14 +71,42 @@ void Grid::fall()
     /* Check for touch down */
     if (cell.line >= _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
     {
-      std::cout << "fall done" << std::endl;
       // TODO Check for line completeness
+      for (const auto &c: _currentBlock)
+      {
+        auto line_done {true};
+        for (auto i{0u}; i < _nbCol; ++i)
+        {
+          if (_grid[c.line][i].occupied == false)
+          {
+            line_done = false;
+            break;
+          }
+        }
+        if (line_done)
+        {
+          if (c.line == 0)
+          {
+            std::cerr << "Should already gamed over\n";
+            break;
+          }
+          std::cout << "line " << c.line << " done" << std::endl;
+          for (auto i{c.line}; i > 0; --i)
+          {
+            for (auto j{0u}; j < _nbCol; ++j)
+            {
+              _grid[i][j].occupied = _grid[i - 1][j].occupied;
+            }
+          }
+        }
+
+        draw();
+      }
+
       newBlock();
       return;
     }
   }
-  std::cout << "fall" << std::endl;
-
 
   for (auto &cell: _currentBlock)
   {

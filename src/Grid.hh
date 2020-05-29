@@ -36,6 +36,8 @@ private:
   const unsigned int _nbLines = 18;
   const unsigned int _nbCol = 10;
 
+  const float _cellSize = 180.f / _nbCol; // TODO hard-coded screen size
+
   std::vector<std::vector<Cell>> _grid;
   std::vector<Cell> _currentBlock;
 

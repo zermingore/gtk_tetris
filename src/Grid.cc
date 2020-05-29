@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <Grid.hh>
 
@@ -97,33 +99,46 @@ void Grid::drawCell(const Cell &cell)
 
   // TODO proper transformation
   static float vertices[] = {
-    -0.5f, -0.5f, 0.0f, // bottom left
-    0.5f,  -0.5f, 0.0f, // bottom right
-    0.5f,  0.5f,  0.0f, // top right
-    -0.5f, 0.5f,  0.0f  // top left
+    -_cellSize, -_cellSize, 0.0f, // bottom left
+    _cellSize,  -_cellSize, 0.0f, // bottom right
+    _cellSize,  _cellSize,  0.0f, // top right
+    -_cellSize, _cellSize,  0.0f  // top left
   };
-
-
-  static float offset = 0.f;
-  if (offset < 0.9)
-  {
-    offset += 0.01;
-    vertices[1] -= 0.005;
-    vertices[4] -= 0.005;
-    vertices[7] -= 0.005;
-    vertices[10] -= 0.005;
-  }
-
-
-  // vertices[0] = -1 + g_current_block_col * 0.2;
-  // vertices[9] = -1 + g_current_block_col * 0.2;
-  // vertices[3] = vertices[0] + g_current_block_nb_cols * 0.2;
-  // vertices[6] = vertices[0] + g_current_block_nb_cols * 0.2;
 
   unsigned int idx[] = {
     0, 1, 3,
     1, 2, 3
   };
+
+
+  glm::mat4 model = glm::mat4(1.0f); // *must* be initialized to identity matrix
+  glm::mat4 view = glm::mat4(1.0f);
+  glm::mat4 projection = glm::mat4(1.0f);
+
+
+  static float x = _cellSize;
+  static float y = _cellSize;
+  static float z = 0.f;
+  x += 0.001f;
+  std::cout << "x,y,z: " << x << ", " << y << ", " << z << std::endl;
+
+
+  //glViewport(0, 0, 360, 720);
+
+  // TODO view && projection matrices computation in the constructor
+  model = glm::translate(model, glm::vec3(x, y, z));
+  projection = glm::ortho(0.0f, 360.0f, 720.0f, 0.0f, -1.0f, 1.0f);
+
+  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -18.f));
+  //projection = glm::perspective(glm::radians(45.0f), 360.f / 720.f, 0.1f, 100.0f);
+
+  // TODO Screen size hard-coded
+  // projection = glm::ortho(0.0f, 360.0f, 0.0f, 720.0f, 0.1f, 100.0f);
+
+  _shader.setMat4("model", model);
+  _shader.setMat4("view", view);
+  _shader.setMat4("projection", projection);
+
 
   unsigned int vbo;
   glGenBuffers(1, &vbo);

@@ -45,8 +45,8 @@ static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 
 static gboolean draw()
 {
-  // using namespace std::chrono_literals;
-  // std::this_thread::sleep_for(1s);
+  using namespace std::chrono_literals;
+  std::this_thread::sleep_for(100ms); // TODO 60fps
 
   g_grid->fall();
   g_grid->draw();

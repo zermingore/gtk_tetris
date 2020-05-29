@@ -44,6 +44,19 @@ private:
   std::vector<Cell> _currentBlock;
 
   Shaders _shader;
+
+
+  const float _blkVertices[16] = {
+    0.f, 0.f, 0.0f, // bottom left
+    1.f, 0.f, 0.0f, // bottom right
+    1.f, 1.f, 0.0f, // top right
+    0.f, 1.f, 0.0f  // top left
+  };
+
+  const unsigned int _blkVerticesIdx[6] = {
+    0, 1, 3,
+    1, 2, 3
+  };
 };
 
 

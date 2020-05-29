@@ -100,20 +100,6 @@ void Grid::newBlock()
 
 void Grid::drawCell(const Cell &cell)
 {
-  // TODO proper transformation
-  static float vertices[] = {
-    0, 0, 0.0f, // bottom left
-     1.f, 0, 0.0f, // bottom right
-     1.f,  1.f, 0.0f, // top right
-    0,  1.f, 0.0f  // top left
-  };
-
-  unsigned int idx[] = {
-    0, 1, 3,
-    1, 2, 3
-  };
-
-
   glm::mat4 model = glm::mat4(1.0f); // *must* be initialized to identity matrix
   glm::mat4 view = glm::mat4(1.0f);
   glm::mat4 projection = glm::mat4(1.0f);
@@ -125,9 +111,8 @@ void Grid::drawCell(const Cell &cell)
   model = glm::translate(model, glm::vec3(x, y, 0.f));
   model = glm::scale(model, glm::vec3(_cellSizeX, _cellSizeY, 0.f));
   projection = glm::ortho(0.0f, 360.0f, 720.0f, 0.0f, -1.0f, 1.0f);
-
   // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -18.f));
-  //projection = glm::perspective(glm::radians(45.0f), 360.f / 720.f, 0.1f, 100.0f);
+  // projection = glm::perspective(glm::radians(45.0f), 360.f / 720.f, 0.1f, 100.0f);
 
   _shader.setMat4("model", model);
   _shader.setMat4("view", view);
@@ -137,7 +122,7 @@ void Grid::drawCell(const Cell &cell)
   unsigned int vbo;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STREAM_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(_blkVertices), _blkVertices, GL_STREAM_DRAW);
 
   unsigned int vao;
   glGenVertexArrays(1, &vao);
@@ -147,7 +132,7 @@ void Grid::drawCell(const Cell &cell)
   glGenBuffers(1, &ebo);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STREAM_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_blkVerticesIdx), _blkVerticesIdx, GL_STREAM_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
   glEnableVertexAttribArray(0);

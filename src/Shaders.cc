@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <GL/glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <Shaders.hh>
 
@@ -64,6 +65,16 @@ void Shaders::setBool(const std::string& name, bool value) const
   setInt(name.c_str(), static_cast<int> (value));
 }
 
+void Shaders::setMat3(const std::string &name, const glm::mat3 &mat) const
+{
+  glUniformMatrix3fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shaders::setMat4(const std::string &name, const glm::mat4 &mat) const
+{
+  glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
 
 
 std::string Shaders::getFileContent(const char *path)
@@ -91,8 +102,7 @@ std::string Shaders::getFileContent(const char *path)
   {
     std::stringstream sstr;
     sstr << "Unknown exception reading [" << path << "]\n";
-    std::cerr << sstr.str();
-    throw sstr.str();
+    throw std::runtime_error(sstr.str());
   }
 }
 
@@ -110,8 +120,7 @@ void Shaders::checkCompilation(unsigned int shader, unsigned int type)
       glGetShaderInfoLog(shader, _errMsgMaxLen, NULL, msg);
       std::stringstream sstr;
       sstr << "Shader " << shader << " compilation error (" << type << "):\n" << msg;
-      std::cerr << sstr.str();
-      throw std::runtime_error(sstr.str().c_str());
+      throw std::runtime_error(sstr.str());
     }
   }
   else

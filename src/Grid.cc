@@ -150,7 +150,7 @@ void Grid::moveLeft()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col <= 0)
+    if (cell.col <= 0 || _grid[cell.line][cell.col - 1].occupied)
       return;
   }
 
@@ -168,7 +168,7 @@ void Grid::moveRight()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col >= _nbCol - 1)
+    if (cell.col >= _nbCol - 1 || _grid[cell.line][cell.col + 1].occupied)
       return;
   }
 

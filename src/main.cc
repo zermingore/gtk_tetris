@@ -58,7 +58,6 @@ static gboolean draw()
   auto difficulty = 100ms;
 
   auto elapsed_time {chr::duration_cast<chr::milliseconds> (now - last_draw)};
-  // std::cout << "elapsed: " << elapsed_time.count() << "\n";
   if (elapsed_time <= difficulty && !g_moved_block_horizontally)
   {
     std::this_thread::sleep_for(1ms);

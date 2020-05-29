@@ -12,6 +12,11 @@
 Grid::Grid()
   : _shader("src/shader.vs", "src/shader.fs")
 {
+  glm::mat4 projection = glm::mat4(1.0f);
+  projection = glm::ortho(0.0f, 360.0f, 720.0f, 0.0f, -1.0f, 1.0f);
+  _shader.setMat4("projection", projection);
+  _shader.setMat4("view", glm::mat4(1.0f));
+
   // Instantiate the cells
   for (auto i{0u}; i < _nbLines; ++i)
   {
@@ -101,8 +106,6 @@ void Grid::newBlock()
 void Grid::drawCell(const Cell &cell)
 {
   glm::mat4 model = glm::mat4(1.0f); // *must* be initialized to identity matrix
-  glm::mat4 view = glm::mat4(1.0f);
-  glm::mat4 projection = glm::mat4(1.0f);
 
   float x = cell.col * _cellSizeX;
   float y = cell.line * _cellSizeY;
@@ -110,14 +113,7 @@ void Grid::drawCell(const Cell &cell)
   // TODO view && projection matrices computation in the constructor
   model = glm::translate(model, glm::vec3(x, y, 0.f));
   model = glm::scale(model, glm::vec3(_cellSizeX, _cellSizeY, 0.f));
-  projection = glm::ortho(0.0f, 360.0f, 720.0f, 0.0f, -1.0f, 1.0f);
-  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -18.f));
-  // projection = glm::perspective(glm::radians(45.0f), 360.f / 720.f, 0.1f, 100.0f);
-
   _shader.setMat4("model", model);
-  _shader.setMat4("view", view);
-  _shader.setMat4("projection", projection);
-
 
   unsigned int vbo;
   glGenBuffers(1, &vbo);

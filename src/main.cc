@@ -1,6 +1,9 @@
 #include <thread>
 #include <chrono>
 #include <memory>
+#include <mutex>
+#include <thread>
+#include <condition_variable>
 #include <iostream>
 
 #include <gtk/gtk.h>
@@ -12,7 +15,7 @@
 GObject *g_render;
 GRand *g_rand;
 std::unique_ptr<Grid> g_grid;
-
+bool g_moved_block_horizontally = false;
 
 
 static int init_render_window()
@@ -32,6 +35,7 @@ static int init_render_window()
 static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
   g_grid->moveLeft();
+  g_moved_block_horizontally = true;
 }
 
 
@@ -39,17 +43,35 @@ static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
   g_grid->moveRight();
+  g_moved_block_horizontally = true;
 }
 
 
 
 static gboolean draw()
 {
+  namespace chr = std::chrono;
   using namespace std::chrono_literals;
-  std::this_thread::sleep_for(100ms); // TODO 60fps
 
-  g_grid->fall();
+  static chr::time_point<chr::system_clock> last_draw = chr::system_clock::now();
+  auto now = chr::system_clock::now();
+  auto difficulty = 100ms;
+
+  auto elapsed_time {chr::duration_cast<chr::milliseconds> (now - last_draw)};
+  // std::cout << "elapsed: " << elapsed_time.count() << "\n";
+  if (elapsed_time <= difficulty && !g_moved_block_horizontally)
+  {
+    std::this_thread::sleep_for(1ms);
+    gtk_widget_queue_draw((GtkWidget*) g_render);
+    return FALSE;
+  }
+
+  if (!g_moved_block_horizontally)
+    g_grid->fall();
   g_grid->draw();
+
+  g_moved_block_horizontally = false;
+  last_draw = chr::system_clock::now();
   gtk_widget_queue_draw((GtkWidget*) g_render);
 
   return TRUE;
@@ -97,7 +119,6 @@ int main(int argc, char **argv)
   gtk_gl_area_set_auto_render((GtkGLArea*) g_render, TRUE);
   g_signal_connect(g_render, "render", G_CALLBACK(draw), NULL);
 
-  // g_timeout_add(16, draw, NULL); // fps limit try
 
   g_rand = g_rand_new_with_seed(123456);
   gtk_main();

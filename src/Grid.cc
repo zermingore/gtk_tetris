@@ -119,11 +119,8 @@ void Grid::drawCell(const Cell &cell)
   static float x = _cellSize;
   static float y = _cellSize;
   static float z = 0.f;
-  x += 0.001f;
-  std::cout << "x,y,z: " << x << ", " << y << ", " << z << std::endl;
-
-
-  //glViewport(0, 0, 360, 720);
+  // x += _cellSize;
+  x += 0.001;
 
   // TODO view && projection matrices computation in the constructor
   model = glm::translate(model, glm::vec3(x, y, z));

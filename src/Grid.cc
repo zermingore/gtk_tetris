@@ -114,7 +114,7 @@ void Grid::newBlock()
   _currentBlock.clear();
 
   _currentBlock.push_back({true, 0, 2});
-  // _currentBlock.push_back({true, 0, 3});
+  _currentBlock.push_back({true, 0, 3});
 
   // TODO Handle block boundaries
   // _currentBlock.push_back({true, 16, 2});
@@ -167,8 +167,23 @@ void Grid::moveLeft()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col <= 0 || _grid[cell.line][cell.col - 1].occupied)
+    if (cell.col <= 0)
       return;
+
+    auto cell_belong_block {false};
+    if (_grid[cell.line][cell.col - 1].occupied)
+    {
+      for (const auto &c: _currentBlock)
+      {
+        if (c.line == cell.line && c.col == cell.col - 1)
+        {
+          cell_belong_block = true;
+        }
+      }
+
+      if (!cell_belong_block)
+        return;
+    }
   }
 
   for (auto &cell: _currentBlock)
@@ -185,8 +200,23 @@ void Grid::moveRight()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col >= _nbCol - 1 || _grid[cell.line][cell.col + 1].occupied)
+    if (cell.col >= _nbCol - 1)
       return;
+
+    auto cell_belong_block {false};
+    if (_grid[cell.line][cell.col + 1].occupied)
+    {
+      for (const auto &c: _currentBlock)
+      {
+        if (c.line == cell.line && c.col == cell.col + 1)
+        {
+          cell_belong_block = true;
+        }
+      }
+
+      if (!cell_belong_block)
+        return;
+    }
   }
 
   for (auto &cell: _currentBlock)

@@ -31,6 +31,7 @@ private:
   auto operator[] (unsigned int column) { return _grid[column]; }
 
   void drawCell(const Cell &cell);
+  void checkLineCompleted();
 
 
   const unsigned int _nbLines = 18;

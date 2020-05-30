@@ -71,39 +71,9 @@ void Grid::fall()
     /* Check for touch down */
     if (cell.line >= _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
     {
-      // TODO Check for line completeness
-      for (const auto &c: _currentBlock)
-      {
-        auto line_done {true};
-        for (auto i{0u}; i < _nbCol; ++i)
-        {
-          if (_grid[c.line][i].occupied == false)
-          {
-            line_done = false;
-            break;
-          }
-        }
-        if (line_done)
-        {
-          if (c.line == 0)
-          {
-            std::cerr << "Should already gamed over\n";
-            break;
-          }
-          std::cout << "line " << c.line << " done" << std::endl;
-          for (auto i{c.line}; i > 0; --i)
-          {
-            for (auto j{0u}; j < _nbCol; ++j)
-            {
-              _grid[i][j].occupied = _grid[i - 1][j].occupied;
-            }
-          }
-        }
-
-        draw();
-      }
-
+      checkLineCompleted();
       newBlock();
+      draw();
       return;
     }
   }
@@ -205,6 +175,41 @@ void Grid::moveRight()
     _grid[cell.line][cell.col].occupied = true;
   }
 }
+
+
+
+void Grid::checkLineCompleted()
+{
+  for (const auto &c: _currentBlock)
+  {
+    auto line_complete {true};
+    for (auto i{0u}; i < _nbCol; ++i)
+    {
+      if (_grid[c.line][i].occupied == false)
+      {
+        line_complete = false;
+        break;
+      }
+    }
+
+    if (line_complete)
+    {
+      for (const auto &c: _currentBlock)
+      {
+        for (auto i{c.line}; i > 0; --i)
+        {
+          for (auto j{0u}; j < _nbCol; ++j)
+          {
+            _grid[i][j].occupied = _grid[i - 1][j].occupied;
+          }
+        }
+      }
+    }
+
+    line_complete = true;
+  }
+}
+
 
 
 // Grid::rotateLeft / rotateRight

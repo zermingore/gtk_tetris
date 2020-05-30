@@ -66,7 +66,12 @@ static gboolean draw()
   }
 
   if (!g_moved_block_horizontally)
-    g_grid->fall();
+  {
+    if (!g_grid->fall())
+    {
+      return FALSE;
+    }
+  }
   g_grid->draw();
 
   g_moved_block_horizontally = false;

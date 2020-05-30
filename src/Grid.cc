@@ -64,15 +64,13 @@ void Grid::draw()
 
 
 
-void Grid::fall()
+bool Grid::fall()
 {
   auto touched_down {false};
   auto line_completed {false};
   auto last_line_reached {false};
   for (const auto &cell: _currentBlock)
   {
-    std::cout << "coords: " << cell.line << ", " << cell.col << std::endl;
-
     /* Check for touch down */
     if (cell.line >= _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
     {
@@ -89,14 +87,14 @@ void Grid::fall()
   if (last_line_reached && !line_completed) // game over
   {
     std::cout << "Game Over" << std::endl;
-    return;
+    return false;
   }
 
   if (touched_down)
   {
     newBlock();
     draw();
-    return;
+    return true;
   }
 
   for (auto &cell: _currentBlock)
@@ -106,7 +104,7 @@ void Grid::fall()
     _grid[cell.line][cell.col].occupied = true;
   }
 
-  return;
+  return true;
 }
 
 

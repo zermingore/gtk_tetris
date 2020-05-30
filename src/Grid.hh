@@ -20,7 +20,7 @@ public:
 
   void draw();
 
-  void fall();
+  bool fall();
   void newBlock();
 
   void moveLeft();

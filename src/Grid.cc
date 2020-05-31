@@ -152,7 +152,7 @@ void Grid::newBlock()
       break;
 
     case 3:
-      _currentBlock = BLOCK_R;
+      _currentBlock = BLOCK_J;
       break;
 
     case 4:
@@ -160,7 +160,7 @@ void Grid::newBlock()
       break;
 
     case 5:
-      _currentBlock = BLOCK_C;
+      _currentBlock = BLOCK_Z;
       break;
 
     case 6:

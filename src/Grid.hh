@@ -104,7 +104,7 @@ private:
     {true,  2, 3},
   }};
 
-  const std::array<Cell, 9> BLOCK_R = {{
+  const std::array<Cell, 9> BLOCK_J = {{
     {false, _nbLines, _nbCol},
     {true, 0, 2},
     {false, _nbLines, _nbCol},
@@ -128,7 +128,7 @@ private:
     {true,  1, 3},
   }};
 
-  const std::array<Cell, 9> BLOCK_C = {{
+  const std::array<Cell, 9> BLOCK_Z = {{
     {false, _nbLines, _nbCol},
     {false, _nbLines, _nbCol},
     {false, _nbLines, _nbCol},

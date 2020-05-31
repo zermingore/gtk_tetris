@@ -13,7 +13,6 @@
 
 
 GObject *g_render;
-GRand *g_rand;
 std::unique_ptr<Grid> g_grid;
 bool g_moved_block_horizontally = false;
 
@@ -124,7 +123,6 @@ int main(int argc, char **argv)
   g_signal_connect(g_render, "render", G_CALLBACK(draw), NULL);
 
 
-  g_rand = g_rand_new_with_seed(123456);
   g_moved_block_horizontally = true; // Forcing a draw at the very beginning
   gtk_main();
 

@@ -1,11 +1,12 @@
+#include <random>
+#include <iostream>
+
 #include <gtk/gtk.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Grid.hh>
-
-#include <iostream>
 
 
 
@@ -131,7 +132,46 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
-  _currentBlock = BLOCK_S;
+  // Random generator initialization
+  static std::random_device r;
+  static std::default_random_engine engine(r());
+  static std::uniform_int_distribution<int> distribution(0, 6);
+  int block_id = distribution(engine);
+  switch (block_id)
+  {
+    case 0:
+      _currentBlock = BLOCK_SQUARE;
+      break;
+
+    case 1:
+      _currentBlock = BLOCK_BAR;
+      break;
+
+    case 2:
+      _currentBlock = BLOCK_L;
+      break;
+
+    case 3:
+      _currentBlock = BLOCK_R;
+      break;
+
+    case 4:
+      _currentBlock = BLOCK_T;
+      break;
+
+    case 5:
+      _currentBlock = BLOCK_C;
+      break;
+
+    case 6:
+      _currentBlock = BLOCK_S;
+      break;
+
+    default:
+      std::cerr << "Unexpected random value [" << block_id << "]\n";
+      _currentBlock = BLOCK_SQUARE;
+      break;
+  }
 }
 
 

@@ -131,15 +131,7 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
-  for (auto &cell: _currentBlock)
-  {
-    cell = {false, _nbLines, _nbCol}; // invalid cell
-  }
-
-  _currentBlock[4] = {true, 0, 2};
-  _currentBlock[5] = {true, 0, 3};
-  _currentBlock[6] = {true, 1, 2};
-  _currentBlock[7] = {true, 1, 3};
+  _currentBlock = BLOCK_T;
 }
 
 

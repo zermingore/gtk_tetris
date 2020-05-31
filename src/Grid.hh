@@ -66,6 +66,55 @@ private:
     0, 1, 3,
     1, 2, 3
   };
+
+
+  const std::array<Cell, 9> BLOCK_SQUARE = {{
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  0, 2},
+    {true,  0, 3},
+    {true,  1, 2},
+    {true,  1, 3},
+    {false, _nbLines, _nbCol},
+  }};
+
+  const std::array<Cell, 9> BLOCK_L = {{
+    {false, _nbLines, _nbCol},
+    {true, 0, 2},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  1, 2},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  2, 2},
+    {true,  2, 3},
+  }};
+
+  const std::array<Cell, 9> BLOCK_R = {{
+    {false, _nbLines, _nbCol},
+    {true, 0, 2},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  1, 2},
+    {false, _nbLines, _nbCol},
+    {true,  2, 1},
+    {true,  2, 2},
+    {false, _nbLines, _nbCol},
+  }};
+
+  const std::array<Cell, 9> BLOCK_T = {{
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true, 0, 2},
+    {false, _nbLines, _nbCol},
+    {true,  1, 1},
+    {true,  1, 2},
+    {true,  1, 3},
+  }};
 };
 
 

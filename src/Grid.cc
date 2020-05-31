@@ -57,11 +57,11 @@ void Grid::draw()
     }
   }
 
-  for (auto i {0u}; i < 9; ++i)
+  for (const auto &cell: _currentBlock)
   {
-    if (_currentBlock[i].occupied)
+    if (cell.occupied)
     {
-      drawCell(_currentBlock[i]);
+      drawCell(cell);
     }
   }
 }
@@ -73,14 +73,13 @@ bool Grid::fall()
   auto touched_down {false};
   auto line_completed {false};
 
-  for (auto i {0u}; i < 9; ++i)
+  for (const auto &cell: _currentBlock)
   {
-    if (!_currentBlock[i].occupied)
+    if (!cell.occupied)
       continue;
 
-    /* Check for touch down */
-    if (   _currentBlock[i].line == _nbLines - 1 // bottom line
-        || _grid[_currentBlock[i].line + 1][_currentBlock[i].col].occupied)
+    /* Check for touch down: bottom reached or landing on an occupied cell */
+    if (cell.line == _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
     {
       touched_down = true;
 
@@ -100,9 +99,9 @@ bool Grid::fall()
   // game over check
   if (touched_down && !line_completed)
   {
-    for (auto i {0u}; i < 9; ++i)
+    for (const auto cell: _currentBlock)
     {
-      if (_currentBlock[i].line == 0)
+      if (cell.line == 0)
       {
         std::cout << "Game Over" << std::endl;
         return false;
@@ -117,12 +116,12 @@ bool Grid::fall()
     return true;
   }
 
-  for (auto i {0u}; i < 9; ++i)
+  for (auto &cell: _currentBlock)
   {
-    if (!_currentBlock[i].occupied)
+    if (!cell.occupied)
       continue;
 
-    ++_currentBlock[i].line; // first line: top
+    ++cell.line; // first line: top
   }
 
   return true;

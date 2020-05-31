@@ -56,9 +56,12 @@ void Grid::draw()
     }
   }
 
-  for (const auto &cell: _currentBlock)
+  for (auto i {0u}; i < 9; ++i)
   {
-    drawCell(cell);
+    if (!_currentBlock[i].occupied)
+      continue;
+
+    drawCell(_currentBlock[i]);
   }
 }
 
@@ -69,20 +72,33 @@ bool Grid::fall()
   auto touched_down {false};
   auto line_completed {false};
   auto last_line_reached {false};
-  for (const auto &cell: _currentBlock)
+
+  for (auto i {0u}; i < 9; ++i)
   {
+    if (!_currentBlock[i].occupied)
+      continue;
+
     /* Check for touch down */
-    if (cell.line >= _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
+    if (   _currentBlock[i].line >= _nbLines - 1
+        || _grid[_currentBlock[i].line + 1][_currentBlock[i].col].occupied)
     {
       touched_down = true;
-      if (cell.line == 0)
+      if (_currentBlock[i].line == 0)
       {
         last_line_reached = true;
       }
+
+      for (auto &c: _currentBlock)
+      {
+        if (!c.occupied)
+          continue;
+
+        _grid[c.line][c.col].occupied = true;
+      }
+
       line_completed |= checkLineCompleted();
     }
   }
-
 
   if (last_line_reached && !line_completed) // game over
   {
@@ -97,11 +113,12 @@ bool Grid::fall()
     return true;
   }
 
-  for (auto &cell: _currentBlock)
+  for (auto i {0u}; i < 9; ++i)
   {
-    _grid[cell.line][cell.col].occupied = false;
-    ++cell.line; // first line: top
-    _grid[cell.line][cell.col].occupied = true;
+    if (!_currentBlock[i].occupied)
+      continue;
+
+    ++_currentBlock[i].line; // first line: top
   }
 
   return true;
@@ -111,14 +128,15 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
-  _currentBlock.clear();
+  for (auto &cell: _currentBlock)
+  {
+    cell = {false, _nbLines, _nbCol}; // invalid cell
+  }
 
-  _currentBlock.push_back({true, 0, 2});
-  _currentBlock.push_back({true, 0, 3});
-
-  // TODO Handle block boundaries
-  // _currentBlock.push_back({true, 16, 2});
-  // _currentBlock.push_back({true, 16, 3});
+  _currentBlock[4] = {true, 0, 2};
+  _currentBlock[5] = {true, 0, 3};
+  _currentBlock[6] = {true, 1, 2};
+  _currentBlock[7] = {true, 1, 3};
 }
 
 
@@ -167,30 +185,21 @@ void Grid::moveLeft()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col <= 0)
-      return;
+    if (!cell.occupied)
+      continue;
 
-    auto cell_belong_block {false};
-    if (_grid[cell.line][cell.col - 1].occupied)
+    if (cell.col <= 0 || _grid[cell.line][cell.col - 1].occupied)
     {
-      for (const auto &c: _currentBlock)
-      {
-        if (c.line == cell.line && c.col == cell.col - 1)
-        {
-          cell_belong_block = true;
-        }
-      }
-
-      if (!cell_belong_block)
-        return;
+      return;
     }
   }
 
   for (auto &cell: _currentBlock)
   {
-    _grid[cell.line][cell.col].occupied = false;
+    if (!cell.occupied)
+      continue;
+
     --cell.col;
-    _grid[cell.line][cell.col].occupied = true;
   }
 }
 
@@ -200,30 +209,21 @@ void Grid::moveRight()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (cell.col >= _nbCol - 1)
-      return;
+    if (!cell.occupied)
+      continue;
 
-    auto cell_belong_block {false};
-    if (_grid[cell.line][cell.col + 1].occupied)
+    if (cell.col >= _nbCol - 1 || _grid[cell.line][cell.col + 1].occupied)
     {
-      for (const auto &c: _currentBlock)
-      {
-        if (c.line == cell.line && c.col == cell.col + 1)
-        {
-          cell_belong_block = true;
-        }
-      }
-
-      if (!cell_belong_block)
-        return;
+      return;
     }
   }
 
   for (auto &cell: _currentBlock)
   {
-    _grid[cell.line][cell.col].occupied = false;
+    if (!cell.occupied)
+      continue;
+
     ++cell.col;
-    _grid[cell.line][cell.col].occupied = true;
   }
 }
 
@@ -233,12 +233,15 @@ bool Grid::checkLineCompleted()
 {
   auto ret {false};
 
-  for (const auto &c: _currentBlock)
+  for (auto i {0u}; i < 9; ++i)
   {
+    if (!_currentBlock[i].occupied)
+      continue;
+
     auto line_complete {true};
-    for (auto i{0u}; i < _nbCol; ++i)
+    for (auto j{0u}; j < _nbCol; ++j)
     {
-      if (_grid[c.line][i].occupied == false)
+      if (_grid[_currentBlock[i].line][j].occupied == false)
       {
         line_complete = false;
         break;
@@ -247,9 +250,12 @@ bool Grid::checkLineCompleted()
 
     if (line_complete)
     {
-      for (const auto &c: _currentBlock)
+      for (auto k {0u}; k < 9; ++k)
       {
-        for (auto i{c.line}; i > 0; --i)
+        if (!_currentBlock[k].occupied)
+          continue;
+
+        for (unsigned int i = _currentBlock[k].line; i > 0; --i)
         {
           for (auto j{0u}; j < _nbCol; ++j)
           {
@@ -269,4 +275,13 @@ bool Grid::checkLineCompleted()
 
 
 
-// Grid::rotateLeft / rotateRight
+void Grid::rotateLeft()
+{
+  //for (const auto )
+}
+
+
+void Grid::rotateRight()
+{
+
+}

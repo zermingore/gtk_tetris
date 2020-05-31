@@ -2,13 +2,18 @@
 # define GRID_HH_
 
 # include <vector>
+# include <array>
 
 # include <Shaders.hh>
 
 
 
-struct Cell;
-
+struct Cell
+{
+  bool occupied;
+  unsigned int line;
+  unsigned int col;
+};
 
 
 class Grid
@@ -26,6 +31,9 @@ public:
   void moveLeft();
   void moveRight();
 
+  void rotateLeft();
+  void rotateRight();
+
 
 private:
   auto operator[] (unsigned int column) { return _grid[column]; }
@@ -42,7 +50,7 @@ private:
   const float _cellSizeY = 720.f / _nbLines;
 
   std::vector<std::vector<Cell>> _grid;
-  std::vector<Cell> _currentBlock;
+  std::array<Cell, 9> _currentBlock;
 
   Shaders _shader;
 
@@ -58,15 +66,6 @@ private:
     0, 1, 3,
     1, 2, 3
   };
-};
-
-
-
-struct Cell
-{
-  bool occupied;
-  unsigned int line;
-  unsigned int col;
 };
 
 

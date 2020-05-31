@@ -149,6 +149,7 @@ private:
     {true,  0, 3},
     {true,  1, 1},
     {true,  1, 2},
+    {false, _nbLines, _nbCol},
   }};
 };
 

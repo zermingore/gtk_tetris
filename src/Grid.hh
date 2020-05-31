@@ -50,7 +50,7 @@ private:
   const float _cellSizeY = 720.f / _nbLines;
 
   std::vector<std::vector<Cell>> _grid;
-  std::array<Cell, 9> _currentBlock;
+  std::array<Cell, 4> _currentBlock;
 
   Shaders _shader;
 
@@ -68,88 +68,53 @@ private:
   };
 
 
-  const std::array<Cell, 9> BLOCK_SQUARE = {{
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_SQUARE = {{
     {true,  0, 2},
     {true,  0, 3},
     {true,  1, 2},
     {true,  1, 3},
-    {false, _nbLines, _nbCol},
   }};
 
-  const std::array<Cell, 9> BLOCK_BAR = {{
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_BAR = {{
     {true,  0, 2},
     {true,  1, 2},
     {true,  2, 2},
     {true,  3, 2},
-    {false, _nbLines, _nbCol},
   }};
 
-  const std::array<Cell, 9> BLOCK_L = {{
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_L = {{
     {true, 0, 2},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
     {true,  1, 2},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
     {true,  2, 2},
     {true,  2, 3},
   }};
 
-  const std::array<Cell, 9> BLOCK_J = {{
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_J = {{
     {true, 0, 2},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
     {true,  1, 2},
-    {false, _nbLines, _nbCol},
     {true,  2, 1},
     {true,  2, 2},
-    {false, _nbLines, _nbCol},
   }};
 
-  const std::array<Cell, 9> BLOCK_T = {{
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_T = {{
     {true, 0, 2},
-    {false, _nbLines, _nbCol},
     {true,  1, 1},
     {true,  1, 2},
     {true,  1, 3},
   }};
 
-  const std::array<Cell, 9> BLOCK_Z = {{
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_Z = {{
     {true,  0, 2},
     {true,  0, 3},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
     {true,  1, 3},
     {true,  1, 4},
   }};
 
-  const std::array<Cell, 9> BLOCK_S = {{
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
-    {false, _nbLines, _nbCol},
+  const std::array<Cell, 4> BLOCK_S = {{
     {true,  0, 2},
     {true,  0, 3},
     {true,  1, 1},
     {true,  1, 2},
-    {false, _nbLines, _nbCol},
   }};
 };
 

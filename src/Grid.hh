@@ -80,6 +80,18 @@ private:
     {false, _nbLines, _nbCol},
   }};
 
+  const std::array<Cell, 9> BLOCK_BAR = {{
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  0, 2},
+    {true,  1, 2},
+    {true,  2, 2},
+    {true,  3, 2},
+    {false, _nbLines, _nbCol},
+  }};
+
   const std::array<Cell, 9> BLOCK_L = {{
     {false, _nbLines, _nbCol},
     {true, 0, 2},
@@ -114,6 +126,29 @@ private:
     {true,  1, 1},
     {true,  1, 2},
     {true,  1, 3},
+  }};
+
+  const std::array<Cell, 9> BLOCK_C = {{
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  0, 2},
+    {true,  0, 3},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  1, 3},
+    {true,  1, 4},
+  }};
+
+  const std::array<Cell, 9> BLOCK_S = {{
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {false, _nbLines, _nbCol},
+    {true,  0, 2},
+    {true,  0, 3},
+    {true,  1, 1},
+    {true,  1, 2},
   }};
 };
 

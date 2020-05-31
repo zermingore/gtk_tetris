@@ -131,7 +131,7 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
-  _currentBlock = BLOCK_T;
+  _currentBlock = BLOCK_S;
 }
 
 

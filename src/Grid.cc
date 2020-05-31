@@ -58,10 +58,10 @@ void Grid::draw()
 
   for (auto i {0u}; i < 9; ++i)
   {
-    if (!_currentBlock[i].occupied)
-      continue;
-
-    drawCell(_currentBlock[i]);
+    if (_currentBlock[i].occupied)
+    {
+      drawCell(_currentBlock[i]);
+    }
   }
 }
 
@@ -71,7 +71,6 @@ bool Grid::fall()
 {
   auto touched_down {false};
   auto line_completed {false};
-  auto last_line_reached {false};
 
   for (auto i {0u}; i < 9; ++i)
   {
@@ -79,14 +78,10 @@ bool Grid::fall()
       continue;
 
     /* Check for touch down */
-    if (   _currentBlock[i].line >= _nbLines - 1
+    if (   _currentBlock[i].line == _nbLines - 1 // bottom line
         || _grid[_currentBlock[i].line + 1][_currentBlock[i].col].occupied)
     {
       touched_down = true;
-      if (_currentBlock[i].line == 0)
-      {
-        last_line_reached = true;
-      }
 
       for (auto &c: _currentBlock)
       {
@@ -96,14 +91,22 @@ bool Grid::fall()
         _grid[c.line][c.col].occupied = true;
       }
 
-      line_completed |= checkLineCompleted();
+      line_completed = checkLineCompleted();
+      break;
     }
   }
 
-  if (last_line_reached && !line_completed) // game over
+  // game over check
+  if (touched_down && !line_completed)
   {
-    std::cout << "Game Over" << std::endl;
-    return false;
+    for (auto i {0u}; i < 9; ++i)
+    {
+      if (_currentBlock[i].line == 0)
+      {
+        std::cout << "Game Over" << std::endl;
+        return false;
+      }
+    }
   }
 
   if (touched_down)
@@ -233,15 +236,12 @@ bool Grid::checkLineCompleted()
 {
   auto ret {false};
 
-  for (auto i {0u}; i < 9; ++i)
+  for (auto i{_nbLines - 1}; i > 0; --i)
   {
-    if (!_currentBlock[i].occupied)
-      continue;
-
     auto line_complete {true};
     for (auto j{0u}; j < _nbCol; ++j)
     {
-      if (_grid[_currentBlock[i].line][j].occupied == false)
+      if (!_grid[i][j].occupied)
       {
         line_complete = false;
         break;
@@ -250,24 +250,16 @@ bool Grid::checkLineCompleted()
 
     if (line_complete)
     {
-      for (auto k {0u}; k < 9; ++k)
+      ret = true;
+      for (auto k{i}; k > 0; --k)
       {
-        if (!_currentBlock[k].occupied)
-          continue;
-
-        for (unsigned int i = _currentBlock[k].line; i > 0; --i)
+        for (auto j{0u}; j < _nbCol; ++j)
         {
-          for (auto j{0u}; j < _nbCol; ++j)
-          {
-            _grid[i][j].occupied = _grid[i - 1][j].occupied;
-          }
+          _grid[k][j].occupied = _grid[k - 1][j].occupied;
         }
       }
-
-      ret = true;
+      ++i;
     }
-
-    line_complete = true;
   }
 
   return ret;

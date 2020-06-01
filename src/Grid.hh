@@ -51,6 +51,8 @@ private:
 
   std::vector<std::vector<Cell>> _grid;
   std::array<Cell, 4> _currentBlock;
+  int _currentBlockType;
+  unsigned int _currentBlockRotation;
 
   Shaders _shader;
 
@@ -68,54 +70,74 @@ private:
   };
 
 
-  const std::array<Cell, 4> BLOCK_SQUARE = {{
-    {true,  0, 2},
-    {true,  0, 3},
-    {true,  1, 2},
-    {true,  1, 3},
-  }};
+  const std::vector<std::array<Cell, 4>> BLOCK_SQUARE = {
+    {{
+        {true, 0, 2},
+        {true, 0, 3},
+        {true, 1, 2},
+        {true, 1, 3},
+    }}
+  };
 
-  const std::array<Cell, 4> BLOCK_BAR = {{
-    {true,  0, 2},
-    {true,  1, 2},
-    {true,  2, 2},
-    {true,  3, 2},
-  }};
+  const std::vector<std::array<Cell, 4>> BLOCK_BAR = {
+    {{
+        {true, 0, 2},
+        {true, 1, 2},
+        {true, 2, 2},
+        {true, 3, 2},
+    }},
+    {{
+        {true, 1, 1},
+        {true, 1, 2},
+        {true, 1, 3},
+        {true, 1, 4},
+    }},
+  };
 
-  const std::array<Cell, 4> BLOCK_L = {{
-    {true, 0, 2},
-    {true,  1, 2},
-    {true,  2, 2},
-    {true,  2, 3},
-  }};
+  const std::vector<std::array<Cell, 4>> BLOCK_L = {
+    {{
+        {true, 0, 2},
+        {true, 1, 2},
+        {true, 2, 2},
+        {true, 2, 3},
+    }}
+  };
 
-  const std::array<Cell, 4> BLOCK_J = {{
-    {true, 0, 2},
-    {true,  1, 2},
-    {true,  2, 1},
-    {true,  2, 2},
-  }};
+  const std::vector<std::array<Cell, 4>> BLOCK_J = {
+    {{
+        {true, 0, 2},
+        {true, 1, 2},
+        {true, 2, 1},
+        {true, 2, 2},
+    }}
+  };
 
-  const std::array<Cell, 4> BLOCK_T = {{
-    {true, 0, 2},
-    {true,  1, 1},
-    {true,  1, 2},
-    {true,  1, 3},
-  }};
+  const std::vector< std::array<Cell, 4>> BLOCK_T = {
+    {{
+        {true, 0, 2},
+        {true, 1, 1},
+        {true, 1, 2},
+        {true, 1, 3},
+    }}
+  };
 
-  const std::array<Cell, 4> BLOCK_Z = {{
-    {true,  0, 2},
-    {true,  0, 3},
-    {true,  1, 3},
-    {true,  1, 4},
-  }};
+  const std::vector< std::array<Cell, 4>> BLOCK_Z = {
+    {{
+        {true, 0, 2},
+        {true, 0, 3},
+        {true, 1, 3},
+        {true, 1, 4},
+    }}
+  };
 
-  const std::array<Cell, 4> BLOCK_S = {{
-    {true,  0, 2},
-    {true,  0, 3},
-    {true,  1, 1},
-    {true,  1, 2},
-  }};
+  const std::vector< std::array<Cell, 4>> BLOCK_S = {
+    {{
+        {true, 0, 2},
+        {true, 0, 3},
+        {true, 1, 1},
+        {true, 1, 2},
+    }}
+  };
 };
 
 

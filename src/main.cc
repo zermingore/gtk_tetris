@@ -31,18 +31,33 @@ static int init_render_window()
 }
 
 
+
 static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
+  std::cout << "main: left cb" << std::endl;
   g_grid->moveLeft();
+  g_moved_block_horizontally = true;
+}
+
+static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
+{
+  std::cout << "main: right cb" << std::endl;
+  g_grid->moveRight();
   g_moved_block_horizontally = true;
 }
 
 
 
-static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
+static void rotate_left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  g_grid->moveRight();
-  g_moved_block_horizontally = true;
+  std::cout << "main: ROTATE left cb" << std::endl;
+  g_grid->rotateLeft();
+}
+
+static void rotate_right_cb(GtkWidget */* unused */, gpointer /* unused */)
+{
+  std::cout << "main: ROTATE right cb" << std::endl;
+  g_grid->rotateRight();
 }
 
 
@@ -54,7 +69,7 @@ static gboolean draw()
 
   static chr::time_point<chr::system_clock> last_draw = chr::system_clock::now();
   auto now = chr::system_clock::now();
-  auto difficulty = 100ms;
+  auto difficulty = 750ms;
 
   auto elapsed_time {chr::duration_cast<chr::milliseconds> (now - last_draw)};
   if (elapsed_time <= difficulty && !g_moved_block_horizontally)
@@ -115,6 +130,12 @@ int main(int argc, char **argv)
 
   button = gtk_builder_get_object(builder, "button_right");
   g_signal_connect(button, "clicked", G_CALLBACK(right_cb), NULL);
+
+  button = gtk_builder_get_object(builder, "button_rotate_left");
+  g_signal_connect(button, "clicked", G_CALLBACK(rotate_left_cb), NULL);
+
+  button = gtk_builder_get_object(builder, "button_rotate_right");
+  g_signal_connect(button, "clicked", G_CALLBACK(rotate_right_cb), NULL);
 
   button = gtk_builder_get_object(builder, "quit");
   g_signal_connect(button, "clicked", G_CALLBACK(gtk_main_quit), NULL);

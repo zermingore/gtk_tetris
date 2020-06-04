@@ -185,9 +185,9 @@ private:
     }},
     {{
         {true, 0, 1},
+        {true, 1, 0},
         {true, 1, 1},
-        {true, 1, 2},
-        {true, 0, 3},
+        {true, 2, 0},
     }}
   };
 
@@ -202,7 +202,7 @@ private:
         {true, 0, 0},
         {true, 1, 0},
         {true, 1, 1},
-        {true, 1, 2},
+        {true, 2, 1},
     }}
   };
 };

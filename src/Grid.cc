@@ -176,8 +176,6 @@ void Grid::newBlock()
       break;
   }
 
-  _currentBlock = BLOCK_BAR[0]; // TODO remove
-
   for (auto &cell: _currentBlock)
   {
     cell.line += _blockMiddle.line;
@@ -316,33 +314,72 @@ bool Grid::checkLineCompleted()
 void Grid::rotateLeft()
 {
   std::cout << "rotate left" << std::endl;
+  std::array<Cell, 4> next;
 
   switch (_currentBlockType)
   {
-    default:
+    case 0:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_SQUARE.size();
+      next = BLOCK_SQUARE[_currentBlockRotation];
+      break;
+
+    case 1:
       _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
-      std::array<Cell, 4> next = BLOCK_BAR[_currentBlockRotation];
+      next = BLOCK_BAR[_currentBlockRotation];
+      break;
 
-      std::array<Cell, 4> tmp;
-      for (auto i{0u}; i < tmp.size(); ++i)
-      {
-        tmp[i].occupied = true;
-        tmp[i].line = _blockMiddle.line + next[i].line;
-        tmp[i].col = _blockMiddle.col + next[i].col;
-      }
+    case 2:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_L.size();
+      next = BLOCK_L[_currentBlockRotation];
+      _currentBlock = BLOCK_L[0];
+      break;
 
-      for (const auto &cell: tmp)
-      {
-        if (cell.line > _nbLines - 1 || cell.col > _nbCol - 1)
-        {
-          std::cout << "aborting rotation" << std::endl;
-          return;
-        }
-      }
+    case 3:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_J.size();
+      next = BLOCK_J[_currentBlockRotation];
+      break;
 
-      std::copy(std::begin(tmp), std::end(tmp), std::begin(_currentBlock));
+    case 4:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_T.size();
+      next = BLOCK_T[_currentBlockRotation];
+      break;
+
+    case 5:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_Z.size();
+      next = BLOCK_Z[_currentBlockRotation];
+      break;
+
+    case 6:
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_S.size();
+      next = BLOCK_S[_currentBlockRotation];
+      break;
+
+    default:
+      std::cerr << "Unexpected _currentBlockType value [" << _currentBlockType << "]\n";
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
+      next = BLOCK_BAR[_currentBlockRotation];
       break;
   }
+
+
+  std::array<Cell, 4> tmp;
+  for (auto i{0u}; i < tmp.size(); ++i)
+  {
+    tmp[i].occupied = true;
+    tmp[i].line = _blockMiddle.line + next[i].line;
+    tmp[i].col = _blockMiddle.col + next[i].col;
+  }
+
+  for (const auto &cell: tmp)
+  {
+    if (cell.line > _nbLines - 1 || cell.col > _nbCol - 1)
+    {
+      std::cout << "aborting rotation" << std::endl;
+      return;
+    }
+  }
+
+  std::copy(std::begin(tmp), std::end(tmp), std::begin(_currentBlock));
 }
 
 

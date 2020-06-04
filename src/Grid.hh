@@ -52,7 +52,7 @@ private:
   std::vector<std::vector<Cell>> _grid;
   std::array<Cell, 4> _currentBlock;
   int _currentBlockType;
-  unsigned int _currentBlockRotation;
+  int _currentBlockRotation;
   Cell _blockMiddle;
 
   Shaders _shader;

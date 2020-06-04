@@ -73,25 +73,25 @@ private:
 
   const std::vector<std::array<Cell, 4>> BLOCK_SQUARE = {
     {{
-        {true, 0, 2},
-        {true, 0, 3},
-        {true, 1, 2},
-        {true, 1, 3},
+        {true, 0, 0},
+        {true, 0, 1},
+        {true, 1, 0},
+        {true, 1, 1},
     }}
   };
 
   const std::vector<std::array<Cell, 4>> BLOCK_BAR = {
     {{
-        {true, -1, 0},
         {true, 0, 0},
         {true, 1, 0},
         {true, 2, 0},
+        {true, 3, 0},
     }},
     {{
-        {true, 0, -1},
         {true, 0, 0},
         {true, 0, 1},
         {true, 0, 2},
+        {true, 0, 3},
     }},
   };
 

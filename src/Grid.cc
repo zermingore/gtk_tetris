@@ -320,9 +320,7 @@ void Grid::rotateLeft()
   switch (_currentBlockType)
   {
     default:
-      std::cout << "_currentBlockRotation: " << _currentBlockRotation;
       _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
-      std::cout << ", " << _currentBlockRotation << std::endl;
       std::array<Cell, 4> next = BLOCK_BAR[_currentBlockRotation];
 
       std::array<Cell, 4> tmp;

@@ -11,8 +11,8 @@
 struct Cell
 {
   bool occupied;
-  unsigned int line;
-  unsigned int col;
+  int line;
+  int col;
 };
 
 
@@ -36,14 +36,14 @@ public:
 
 
 private:
-  auto operator[] (unsigned int column) { return _grid[column]; }
+  auto operator[] (int column) { return _grid[column]; }
 
   void drawCell(const Cell &cell);
   bool checkLineCompleted();
 
 
-  const unsigned int _nbLines = 18;
-  const unsigned int _nbCol = 10;
+  const int _nbLines = 18;
+  const int _nbCol = 10;
 
   // TODO hard-coded screen size
   const float _cellSizeX = 360.f / _nbCol;
@@ -53,6 +53,7 @@ private:
   std::array<Cell, 4> _currentBlock;
   int _currentBlockType;
   unsigned int _currentBlockRotation;
+  Cell _blockMiddle;
 
   Shaders _shader;
 
@@ -81,16 +82,16 @@ private:
 
   const std::vector<std::array<Cell, 4>> BLOCK_BAR = {
     {{
-        {true, 0, 2},
-        {true, 1, 2},
-        {true, 2, 2},
-        {true, 3, 2},
+        {true, -1, 0},
+        {true, 0, 0},
+        {true, 1, 0},
+        {true, 2, 0},
     }},
     {{
-        {true, 1, 1},
-        {true, 1, 2},
-        {true, 1, 3},
-        {true, 1, 4},
+        {true, 0, -1},
+        {true, 0, 0},
+        {true, 0, 1},
+        {true, 0, 2},
     }},
   };
 

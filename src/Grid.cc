@@ -123,6 +123,7 @@ bool Grid::fall()
 
     ++cell.line; // first line: top
   }
+  ++_blockMiddle.line;
 
   return true;
 }
@@ -131,6 +132,8 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
+  _blockMiddle = {true, 1, _nbCol / 2};
+
   // Random generator initialization
   static std::random_device r;
   static std::default_random_engine engine(r());
@@ -174,6 +177,12 @@ void Grid::newBlock()
   }
 
   _currentBlock = BLOCK_BAR[0]; // TODO remove
+
+  for (auto &cell: _currentBlock)
+  {
+    cell.line += _blockMiddle.line;
+    cell.col += _blockMiddle.col;
+  }
 }
 
 
@@ -238,6 +247,7 @@ void Grid::moveLeft()
 
     --cell.col;
   }
+  --_blockMiddle.col;
 }
 
 
@@ -262,6 +272,7 @@ void Grid::moveRight()
 
     ++cell.col;
   }
+  ++_blockMiddle.col;
 }
 
 
@@ -309,20 +320,23 @@ void Grid::rotateLeft()
   switch (_currentBlockType)
   {
     default:
-      std::array<Cell, 4> tmp;
-      std::array<Cell, 4> next = BLOCK_BAR[(_currentBlockRotation + 1) % BLOCK_BAR.size()];
-      std::array<Cell, 4> ori = BLOCK_BAR[_currentBlockRotation];
+      std::cout << "_currentBlockRotation: " << _currentBlockRotation;
+      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
+      std::cout << ", " << _currentBlockRotation << std::endl;
+      std::array<Cell, 4> next = BLOCK_BAR[_currentBlockRotation];
 
+      std::array<Cell, 4> tmp;
       for (auto i{0u}; i < tmp.size(); ++i)
       {
         tmp[i].occupied = true;
-        tmp[i].line = next[i].line - ori[i].line +_currentBlock[i].line;
-        tmp[i].col = next[i].col - ori[i].col +_currentBlock[i].col;
+        tmp[i].line = _blockMiddle.line + next[i].line;
+        tmp[i].col = _blockMiddle.col + next[i].col;
       }
 
       for (const auto &cell: tmp)
       {
-        if (cell.line > _nbLines - 1 || cell.col > _nbCol - 1)
+        if (   cell.line < 0 || cell.line > _nbLines - 1
+            || cell.col < 0 || cell.col > _nbCol - 1)
         {
           std::cout << "aborting rotation" << std::endl;
           return;
@@ -331,12 +345,6 @@ void Grid::rotateLeft()
 
       std::copy(std::begin(tmp), std::end(tmp), std::begin(_currentBlock));
       break;
-  }
-
-  std::cout << "done with rotation" << std::endl;
-  for (const auto &cell: _currentBlock)
-  {
-    std::cout << "_currentBlock: " << cell.line << ", " << cell.col << std::endl;
   }
 }
 

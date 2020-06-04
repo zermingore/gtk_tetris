@@ -59,10 +59,7 @@ void Grid::draw()
 
   for (const auto &cell: _currentBlock)
   {
-    if (cell.occupied)
-    {
-      drawCell(cell);
-    }
+    drawCell(cell);
   }
 }
 
@@ -75,9 +72,6 @@ bool Grid::fall()
 
   for (const auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     /* Check for touch down: bottom reached or landing on an occupied cell */
     if (cell.line == _nbLines - 1 || _grid[cell.line + 1][cell.col].occupied)
     {
@@ -85,9 +79,6 @@ bool Grid::fall()
 
       for (auto &c: _currentBlock)
       {
-        if (!c.occupied)
-          continue;
-
         _grid[c.line][c.col].occupied = true;
       }
 
@@ -118,9 +109,6 @@ bool Grid::fall()
 
   for (auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     ++cell.line; // first line: top
   }
   ++_blockMiddle.line;
@@ -195,9 +183,6 @@ void Grid::moveLeft()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     if (cell.col <= 0 || _grid[cell.line][cell.col - 1].occupied)
     {
       return;
@@ -206,9 +191,6 @@ void Grid::moveLeft()
 
   for (auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     --cell.col;
   }
   --_blockMiddle.col;
@@ -220,9 +202,6 @@ void Grid::moveRight()
 {
   for (const auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     if (cell.col >= _nbCol - 1 || _grid[cell.line][cell.col + 1].occupied)
     {
       return;
@@ -231,9 +210,6 @@ void Grid::moveRight()
 
   for (auto &cell: _currentBlock)
   {
-    if (!cell.occupied)
-      continue;
-
     ++cell.col;
   }
   ++_blockMiddle.col;

@@ -71,139 +71,142 @@ private:
   };
 
 
-  const std::vector<std::array<Cell, 4>> BLOCK_SQUARE = {
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 1, 0},
-        {true, 1, 1},
-    }}
-  };
+  const std::vector<std::vector<std::array<Cell, 4>>> _blocks
+  {
+    { // BLOCK_SQUARE
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 1, 0},
+          {true, 1, 1},
+      }}
+    },
 
-  const std::vector<std::array<Cell, 4>> BLOCK_BAR = {
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 2, 0},
-        {true, 3, 0},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 0, 2},
-        {true, 0, 3},
-    }},
-  };
+    { // BLOCK_BAR
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 2, 0},
+          {true, 3, 0},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 0, 2},
+          {true, 0, 3},
+      }},
+    },
 
-  const std::vector<std::array<Cell, 4>> BLOCK_L = {
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 2, 0},
-        {true, 2, 1},
-    }},
-    {{
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 1, 2},
-        {true, 0, 2},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 1, 1},
-        {true, 2, 1},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 0, 1},
-        {true, 0, 2},
-    }}
-  };
+    { // BLOCK_L
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 2, 0},
+          {true, 2, 1},
+      }},
+      {{
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 1, 2},
+          {true, 0, 2},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 1, 1},
+          {true, 2, 1},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 0, 1},
+          {true, 0, 2},
+      }}
+    },
 
-  const std::vector<std::array<Cell, 4>> BLOCK_J = {
-    {{
-        {true, 0, 1},
-        {true, 1, 1},
-        {true, 2, 1},
-        {true, 2, 0},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 0, 2},
-        {true, 1, 2},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 1, 1},
-        {true, 2, 1},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 0, 1},
-        {true, 0, 2},
-    }}
-  };
+    { // BLOCK_J
+      {{
+          {true, 0, 1},
+          {true, 1, 1},
+          {true, 2, 1},
+          {true, 2, 0},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 0, 2},
+          {true, 1, 2},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 1, 1},
+          {true, 2, 1},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 0, 1},
+          {true, 0, 2},
+      }}
+    },
 
-  const std::vector< std::array<Cell, 4>> BLOCK_T = {
-    {{
-        {true, 0, 1},
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 1, 2},
-    }},
-    {{
-        {true, 0, 1},
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 2, 1},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 0, 2},
-        {true, 1, 1},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 2, 0},
-    }}
-  };
+    { // BLOCK_T
+      {{
+          {true, 0, 1},
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 1, 2},
+      }},
+      {{
+          {true, 0, 1},
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 2, 1},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 0, 2},
+          {true, 1, 1},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 2, 0},
+      }}
+    },
 
-  const std::vector< std::array<Cell, 4>> BLOCK_Z = {
-    {{
-        {true, 0, 0},
-        {true, 0, 1},
-        {true, 1, 1},
-        {true, 1, 2},
-    }},
-    {{
-        {true, 0, 1},
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 2, 0},
-    }}
-  };
+    { // BLOCK_Z
+      {{
+          {true, 0, 0},
+          {true, 0, 1},
+          {true, 1, 1},
+          {true, 1, 2},
+      }},
+      {{
+          {true, 0, 1},
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 2, 0},
+      }}
+    },
 
-  const std::vector< std::array<Cell, 4>> BLOCK_S = {
-    {{
-        {true, 0, 1},
-        {true, 0, 2},
-        {true, 1, 0},
-        {true, 1, 1},
-    }},
-    {{
-        {true, 0, 0},
-        {true, 1, 0},
-        {true, 1, 1},
-        {true, 2, 1},
-    }}
+    { // BLOCK_S
+      {{
+          {true, 0, 1},
+          {true, 0, 2},
+          {true, 1, 0},
+          {true, 1, 1},
+      }},
+      {{
+          {true, 0, 0},
+          {true, 1, 0},
+          {true, 1, 1},
+          {true, 2, 1},
+      }}
+    },
   };
 };
 

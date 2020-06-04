@@ -140,41 +140,7 @@ void Grid::newBlock()
   static std::uniform_int_distribution<int> distribution(0, 6);
   _currentBlockType = distribution(engine);
   _currentBlockRotation = 0;
-  switch (_currentBlockType)
-  {
-    case 0:
-      _currentBlock = BLOCK_SQUARE[0];
-      break;
-
-    case 1:
-      _currentBlock = BLOCK_BAR[0];
-      break;
-
-    case 2:
-      _currentBlock = BLOCK_L[0];
-      break;
-
-    case 3:
-      _currentBlock = BLOCK_J[0];
-      break;
-
-    case 4:
-      _currentBlock = BLOCK_T[0];
-      break;
-
-    case 5:
-      _currentBlock = BLOCK_Z[0];
-      break;
-
-    case 6:
-      _currentBlock = BLOCK_S[0];
-      break;
-
-    default:
-      std::cerr << "Unexpected random value [" << _currentBlockType << "]\n";
-      _currentBlock = BLOCK_SQUARE[0];
-      break;
-  }
+  _currentBlock = _blocks[_currentBlockType][0];
 
   for (auto &cell: _currentBlock)
   {
@@ -314,54 +280,11 @@ bool Grid::checkLineCompleted()
 void Grid::rotateLeft()
 {
   auto restore_rotation {_currentBlockRotation};
-  std::array<Cell, 4> next;
 
-  switch (_currentBlockType)
-  {
-    case 0:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_SQUARE.size();
-      next = BLOCK_SQUARE[_currentBlockRotation];
-      break;
+  ++_currentBlockRotation;
+  _currentBlockRotation %= _blocks[_currentBlockType].size();
 
-    case 1:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
-      next = BLOCK_BAR[_currentBlockRotation];
-      break;
-
-    case 2:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_L.size();
-      next = BLOCK_L[_currentBlockRotation];
-      _currentBlock = BLOCK_L[0];
-      break;
-
-    case 3:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_J.size();
-      next = BLOCK_J[_currentBlockRotation];
-      break;
-
-    case 4:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_T.size();
-      next = BLOCK_T[_currentBlockRotation];
-      break;
-
-    case 5:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_Z.size();
-      next = BLOCK_Z[_currentBlockRotation];
-      break;
-
-    case 6:
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_S.size();
-      next = BLOCK_S[_currentBlockRotation];
-      break;
-
-    default:
-      std::cerr << "Unexpected _currentBlockType value [" << _currentBlockType << "]\n";
-      _currentBlockRotation = (_currentBlockRotation + 1) % BLOCK_BAR.size();
-      next = BLOCK_BAR[_currentBlockRotation];
-      break;
-  }
-
-
+  std::array<Cell, 4> next = _blocks[_currentBlockType][_currentBlockRotation];
   std::array<Cell, 4> tmp;
   for (auto i{0u}; i < tmp.size(); ++i)
   {
@@ -388,63 +311,12 @@ void Grid::rotateLeft()
 void Grid::rotateRight()
 {
   auto restore_rotation {_currentBlockRotation};
-  std::array<Cell, 4> next;
 
   --_currentBlockRotation;
-  switch (_currentBlockType)
-  {
-    case 0:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_SQUARE.size() - 1;
-      next = BLOCK_SQUARE[_currentBlockRotation];
-      break;
+  if (_currentBlockRotation < 0)
+    _currentBlockRotation = _blocks[_currentBlockType].size() - 1;
 
-    case 1:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_BAR.size() - 1;
-      next = BLOCK_BAR[_currentBlockRotation];
-      break;
-
-    case 2:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_L.size() - 1;
-      next = BLOCK_L[_currentBlockRotation];
-      _currentBlock = BLOCK_L[0];
-      break;
-
-    case 3:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_J.size() - 1;
-      next = BLOCK_J[_currentBlockRotation];
-      break;
-
-    case 4:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_T.size() - 1;
-      next = BLOCK_T[_currentBlockRotation];
-      break;
-
-    case 5:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_Z.size() - 1;
-      next = BLOCK_Z[_currentBlockRotation];
-      break;
-
-    case 6:
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_S.size() - 1;
-      next = BLOCK_S[_currentBlockRotation];
-      break;
-
-    default:
-      std::cerr << "Unexpected _currentBlockType value [" << _currentBlockType << "]\n";
-      if (_currentBlockRotation < 0)
-        _currentBlockRotation = BLOCK_BAR.size() - 1;
-      next = BLOCK_BAR[_currentBlockRotation];
-      break;
-  }
-
-
+  std::array<Cell, 4> next = _blocks[_currentBlockType][_currentBlockRotation];
   std::array<Cell, 4> tmp;
   for (auto i{0u}; i < tmp.size(); ++i)
   {

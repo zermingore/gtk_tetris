@@ -333,8 +333,7 @@ void Grid::rotateLeft()
 
       for (const auto &cell: tmp)
       {
-        if (   cell.line < 0 || cell.line > _nbLines - 1
-            || cell.col < 0 || cell.col > _nbCol - 1)
+        if (cell.line > _nbLines - 1 || cell.col > _nbCol - 1)
         {
           std::cout << "aborting rotation" << std::endl;
           return;

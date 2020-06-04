@@ -11,8 +11,8 @@
 struct Cell
 {
   bool occupied;
-  int line;
-  int col;
+  unsigned int line;
+  unsigned int col;
 };
 
 
@@ -36,14 +36,14 @@ public:
 
 
 private:
-  auto operator[] (int column) { return _grid[column]; }
+  auto operator[] (unsigned int column) { return _grid[column]; }
 
   void drawCell(const Cell &cell);
   bool checkLineCompleted();
 
 
-  const int _nbLines = 18;
-  const int _nbCol = 10;
+  const unsigned int _nbLines = 18;
+  const unsigned int _nbCol = 10;
 
   // TODO hard-coded screen size
   const float _cellSizeX = 360.f / _nbCol;

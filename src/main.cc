@@ -69,7 +69,7 @@ static gboolean draw()
 
   static chr::time_point<chr::system_clock> last_draw = chr::system_clock::now();
   auto now = chr::system_clock::now();
-  auto difficulty = 750ms;
+  auto difficulty = 100ms;
 
   auto elapsed_time {chr::duration_cast<chr::milliseconds> (now - last_draw)};
   if (elapsed_time <= difficulty && !g_moved_block_horizontally)

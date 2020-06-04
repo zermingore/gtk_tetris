@@ -132,7 +132,7 @@ bool Grid::fall()
 
 void Grid::newBlock()
 {
-  _blockMiddle = {true, 1, _nbCol / 2};
+  _blockMiddle = {true, 0, _nbCol / 2};
 
   // Random generator initialization
   static std::random_device r;

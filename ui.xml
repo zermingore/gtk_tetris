@@ -1,7 +1,7 @@
 <interface>
   <object id="window" class="GtkWindow">
     <property name="visible">True</property>
-    <property name="title">Grid</property>
+    <property name="title">gtk_tetris</property>
     <property name="border-width">0</property>
     <child>
       <object id="grid" class="GtkGrid">

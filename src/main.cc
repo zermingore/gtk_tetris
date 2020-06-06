@@ -34,14 +34,12 @@ static int init_render_window()
 
 static void left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  std::cout << "main: left cb" << std::endl;
   g_grid->moveLeft();
   g_moved_block_horizontally = true;
 }
 
 static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  std::cout << "main: right cb" << std::endl;
   g_grid->moveRight();
   g_moved_block_horizontally = true;
 }
@@ -50,13 +48,11 @@ static void right_cb(GtkWidget */* unused */, gpointer /* unused */)
 
 static void rotate_left_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  std::cout << "main: ROTATE left cb" << std::endl;
   g_grid->rotateLeft();
 }
 
 static void rotate_right_cb(GtkWidget */* unused */, gpointer /* unused */)
 {
-  std::cout << "main: ROTATE right cb" << std::endl;
   g_grid->rotateRight();
 }
 

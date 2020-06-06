@@ -273,7 +273,6 @@ void Grid::rotateLeft()
   {
     if (cell.line > _nbLines - 1 || cell.col > _nbCol - 1)
     {
-      std::cout << "aborting rotation" << std::endl;
       _currentBlockRotation = restore_rotation;
       return;
     }

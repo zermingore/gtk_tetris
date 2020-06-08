@@ -43,7 +43,6 @@ Grid::Grid()
 
 void Grid::draw()
 {
-  glClearColor(.95, .95, .95, 0);
   glClear(GL_COLOR_BUFFER_BIT);
 
   for (auto i{0u}; i < _nbLines; ++i)

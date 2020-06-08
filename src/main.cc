@@ -93,15 +93,40 @@ static gboolean draw()
 
 
 
+int loadCss()
+{
+  GtkCssProvider *provider = gtk_css_provider_new();
+  GdkDisplay *display = gdk_display_get_default();
+  GdkScreen *screen = gdk_display_get_default_screen(display);
+  gtk_style_context_add_provider_for_screen(
+    screen, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  const gchar *cssFile = "style.css";
+  GError *error = 0;
+  if (!gtk_css_provider_load_from_file(provider, g_file_new_for_path(cssFile), &error))
+  {
+    g_printerr("Error loading CSS: %s\n", error->message);
+    g_clear_error(&error);
+    return 1;
+  }
+
+  g_object_unref(provider);
+  return 0;
+}
+
+
+
 int main(int argc, char **argv)
 {
   gtk_init(&argc, &argv);
+  if (loadCss() != 0)
+    return 1;
 
   GtkBuilder *builder = gtk_builder_new();
   GError *error = NULL;
   if (!gtk_builder_add_from_file(builder, "ui.xml", &error)) // 0 on error
   {
-    g_printerr("Error loading file: %s\n", error->message);
+    g_printerr("Error loading UI file: %s\n", error->message);
     g_clear_error(&error);
     return 1;
   }

@@ -1,0 +1,15 @@
+GtkWindow {
+    background-color: magenta;
+}
+
+GObject {
+    background-color: magenta;
+}
+
+GtkButton {
+    background-image: none;
+}
+
+GtkGLArea {
+    background-color: magenta;
+}
